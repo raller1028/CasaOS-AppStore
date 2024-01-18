@@ -6,10 +6,11 @@ services:
     ipc: host
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
+      - CPU_FALLBACK=true
     deploy:
       resources:
         reservations:
-          memory: 12G
+          memory: 6G
     network_mode: bridge
     ports:
       - target: 7860
