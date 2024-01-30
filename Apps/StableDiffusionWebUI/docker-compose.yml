@@ -1,6 +1,6 @@
 name: stable-diffusion-webui
 services:
-  stable-diffusion-webui:
+  icewhale-stable-diffusion-webui:
     image: johnguan/stable-diffusion-webui:latest
     runtime: nvidia
     ipc: host
@@ -28,11 +28,11 @@ services:
         source: /DATA/AppData/Stable-Diffusion-WebUI/config
         target: /data/config
     privileged: false
-    container_name: stable-diffusion-webui
+    container_name: icewhale-stable-diffusion-webui
 x-casaos:
   architectures:
     - amd64
-  main: stable-diffusion-webui
+  main: icewhale-stable-diffusion-webui
   author: JohnGuan
   category: Developer
   description:
@@ -43,7 +43,7 @@ x-casaos:
     en_us: Stable Diffusion web UI is a great way to explore the possibilities of Stable Diffusion and create amazing images with just a few clicks.
     zh_cn: Stable Diffusion web UI是探索Stable Diffusion可能性并仅通过几次点击创建惊人图像的绝佳方式。
   scheme: http
-  store_app_id: stable-diffusion-webui
+  store_app_id: icewhale-stable-diffusion-webui
   title:
     en_us: Stable Diffusion WebUI
   index: /
