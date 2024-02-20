@@ -178,6 +178,6 @@ x-casaos:
   thumbnail: https://cdn.jsdelivr.net/gh/IceWhaleTech/CasaOS-AppStore@main/Apps/Windmill/thumbnail.png
   tips: {}
   title:
-    en_us: Sonarr
+    en_us: Windmill
   index: /
   port_map: "8989"
