@@ -167,7 +167,7 @@ x-casaos:
   category: Developer
   description:
     en_us: Windmill is an open-source, blazing fast and scalable alternative to Retool, Airplane, Superblocks, n8n, Airflow, Temporal to build all your internal tools (endpoints, workflows, UIs) through the combination of code (in Typescript, Python, Go, Bash, SQL or any docker image) and low code builders.
- developer: Windmill
+  developer: Windmill
   icon: https://cdn.jsdelivr.net/gh/IceWhaleTech/CasaOS-AppStore@main/Apps/Windmill/icon.png
   screenshot_link:
     - https://cdn.jsdelivr.net/gh/IceWhaleTech/CasaOS-AppStore@main/Apps/Windmill/screenshot-1.png
