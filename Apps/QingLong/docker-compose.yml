@@ -15,6 +15,8 @@ services:
     privileged: false
     container_name: "qinglong"
 x-casaos:
+  architectures:
+    - amd64
   author: self
   category: self
   hostname: ""
