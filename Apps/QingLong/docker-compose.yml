@@ -1,0 +1,32 @@
+name: qinglong
+services:
+  qinglong:
+    command: []
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    image: whyour/qinglong:2.17
+    ports:
+      - target: 5700
+        published: "5700"
+        protocol: tcp
+    restart: unless-stopped
+    volumes: []
+    devices: []
+    cap_add: []
+    environment: []
+    network_mode: bridge
+    privileged: false
+    container_name: ""
+x-casaos:
+  author: self
+  category: self
+  hostname: ""
+  icon: https://icon.casaos.io/main/all/qinglong.png
+  index: /
+  port_map: "5700"
+  scheme: http
+  store_app_id: nurturing_kenichi
+  title:
+    en_us: qinglong
