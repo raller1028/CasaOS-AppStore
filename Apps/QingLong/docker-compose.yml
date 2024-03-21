@@ -17,6 +17,7 @@ services:
 x-casaos:
   architectures:
     - amd64
+  main: qinglong
   author: self
   category: self
   hostname: ""
