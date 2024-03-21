@@ -1,7 +1,6 @@
 name: qinglong
 services:
   qinglong:
-    command: []
     deploy:
       resources:
         limits:
@@ -12,13 +11,9 @@ services:
         published: "5700"
         protocol: tcp
     restart: unless-stopped
-    volumes: []
-    devices: []
-    cap_add: []
-    environment: []
     network_mode: bridge
     privileged: false
-    container_name: ""
+    container_name: "qinglong"
 x-casaos:
   author: self
   category: self
@@ -27,6 +22,6 @@ x-casaos:
   index: /
   port_map: "5700"
   scheme: http
-  store_app_id: nurturing_kenichi
+  store_app_id: qinglong
   title:
     en_us: qinglong
