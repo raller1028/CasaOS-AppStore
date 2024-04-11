@@ -5,7 +5,7 @@ services:
       resources:
         limits:
           memory: 256M
-    image: whyour/qinglong:2.17
+    image: whyour/qinglong:2.16
     ports:
       - target: 5700
         published: "5700"
