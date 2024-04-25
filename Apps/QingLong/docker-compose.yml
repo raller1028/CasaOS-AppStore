@@ -12,11 +12,8 @@ services:
         protocol: tcp
     volumes:
       - type: bind
-        source: /DATA/AppData/$AppID/ql/data
+        source: /DATA/AppData/qinglong/ql/data
         target: /ql/data
-      - type: bind
-        source: /DATA/Media
-        target: /Media
     restart: unless-stopped
     network_mode: bridge
     privileged: false
