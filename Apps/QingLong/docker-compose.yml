@@ -10,6 +10,13 @@ services:
       - target: 5700
         published: "5700"
         protocol: tcp
+    volumes:
+      - type: bind
+        source: /DATA/AppData/$AppID/ql/data
+        target: /ql/data
+      - type: bind
+        source: /DATA/Media
+        target: /Media
     restart: unless-stopped
     network_mode: bridge
     privileged: false
