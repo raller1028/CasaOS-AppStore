@@ -8,7 +8,7 @@ services:
           memory: 1024M
     container_name: immich-server
     hostname: immich-server
-    image: altran1502/immich-server:v2.1.0
+    image: altran1502/immich-server:v1.132.3
     volumes:
       - /DATA/Gallery/immich:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
@@ -30,7 +30,7 @@ services:
   immich-machine-learning:
     container_name: immich-machine-learning
     hostname: immich-machine-learning
-    image: altran1502/immich-machine-learning:v2.1.0
+    image: altran1502/immich-machine-learning:v1.132.3
     environment:
       DB_DATABASE_NAME: immich
       DB_PASSWORD: postgres
@@ -57,37 +57,37 @@ services:
 
   database:
     container_name: immich-postgres
-    image: ghcr.io/immich-app/postgres:16-vectorchord0.4.3-pgvectors0.2.0
+    hostname: immich-postgres
+    image: docker.io/tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:739cdd626151ff1f796dc95a6591b55a714f341c737e27f045019ceabf8e8c52
     environment:
-      POSTGRES_DB: immich
-      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: immich
       POSTGRES_INITDB_ARGS: '--data-checksums'
     volumes:
       - /DATA/AppData/immich/pgdata:/var/lib/postgresql/data
-    shm_size: 128mb
+    healthcheck:
+      test: pg_isready --dbname='immich' --username='postgres' || exit 1; Chksum="$$(psql --dbname='immich' --username='postgres' --tuples-only --no-align --command='SELECT COALESCE(SUM(checksum_failures), 0) FROM pg_stat_database')"; echo "checksum failure count is $$Chksum"; [ "$$Chksum" = '0' ] || exit 1
+      interval: 5m
+      start_interval: 30s
+      start_period: 5m
+    command:
+      [
+        'postgres',
+        '-c',
+        'shared_preload_libraries=vectors.so',
+        '-c',
+        'search_path="$$user", public, vectors',
+        '-c',
+        'logging_collector=on',
+        '-c',
+        'max_wal_size=2GB',
+        '-c',
+        'shared_buffers=512MB',
+        '-c',
+        'wal_compression=on',
+      ]
     restart: unless-stopped
-  #  healthcheck:
-  #   test: pg_isready --dbname='immich' --username='postgres' || exit 1; Chksum="$$(psql --dbname='immich' --username='postgres' --tuples-only --no-align --command='SELECT COALESCE(SUM(checksum_failures), 0) FROM pg_stat_database')"; echo "checksum failure count is $$Chksum"; [ "$$Chksum" = '0' ] || exit 1
-  #   interval: 5m
-  #   start_interval: 30s
-  #   start_period: 5m
-  # command:
-  #   [
-  #     'postgres',
-  #     '-c',
-  #     'shared_preload_libraries=vectors.so',
-  #     '-c',
-  #     'search_path="$$user", public, vectors',
-  #     '-c',
-  #     'logging_collector=on',
-  #     '-c',
-  #     'max_wal_size=2GB',
-  #     '-c',
-  #     'shared_buffers=512MB',
-  #     '-c',
-  #     'wal_compression=on',
-  #   ]
     networks:
       - immich
 
@@ -212,10 +212,4 @@ x-casaos:
 
       O Immich está aqui para transformar a forma como gere e desfruta dos seus ficheiros multimédia na televisão de casa, smartphones e outros dispositivos. Ao contrário dos álbuns de fotos tradicionais ou dos serviços de nuvem convencionais, o immich oferece uma plataforma moderna e fluida para organizar, partilhar e aceder às suas fotos e vídeos. Imagine fazer o backup dos seus momentos preciosos a partir dos seus dispositivos móveis sem esforço e visualizá-los instantaneamente na sua televisão ou partilhá-los com membros da família—o immich torna tudo isso possível.
 
-      O Immich destaca-se pelo backup automático a partir de dispositivos móveis, uma interface web elegante para uma navegação fácil pelos conteúdos e funcionalidades avançadas como reconhecimento facial e deteção de objetos. Pode organizar os seus conteúdos por localização, desfrutar da reprodução de vídeos em 4K e até gerir fotos RAW. Além disso, com suporte multiutilizador, partilhar memórias com amigos e família é extremamente simples. A melhor parte? O Immich oferece estas funcionalidades poderosas a baixo custo, garantindo uma experiência premium sem gastar muito.
-
-      Implementar o immich num dispositivo de nuvem privada como o Zima proporciona uma conveniência incomparável. Desfrute de capacidade de armazenamento ilimitada, velocidades de rede local extremamente rápidas e acesso fácil a partir de múltiplos dispositivos. Com o immich na sua nuvem privada Zima, os seus conteúdos estão sempre ao seu alcance, seguros e protegidos em sua casa.
-    ru_RU: |
-      Immich: Революция в управлении домашними медиа
-
-      Immich меняет подход к управлению и наслаждению медиафайлами на вашем домашнем телевизоре, смартфонах и других устройствах. В отличие от традиционных фотоальбомов или популярных облачных сервисов, Immich предлагает бесшовную и современную платформ
+      O Immich destaca-se pelo backup automático a partir de dispositivos móveis, uma interface web elegante para uma navegação fácil pelos conteúdos e funcionalidades avançadas como reconhecimento facial e deteção de objetos. Pode organizar os seus conteúdos por localização, desfrutar da reprodução de vídeos em 4K e até gerir fotos RAW. Além disso, com suporte multiutilizador, partilhar memórias com amigos e família é extremamente simples. A melhor pa
