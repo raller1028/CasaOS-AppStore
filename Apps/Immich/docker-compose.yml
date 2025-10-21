@@ -20,7 +20,7 @@ services:
       - '2283:2283'
     depends_on:
       - redis
-      - database
+      - immich-postgres-v2
     restart: unless-stopped
     healthcheck:
       disable: false
