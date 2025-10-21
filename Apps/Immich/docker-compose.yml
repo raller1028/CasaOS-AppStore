@@ -8,7 +8,7 @@ services:
           memory: 1024M
     container_name: immich-server
     hostname: immich-server
-    image: altran1502/immich-server:v2.1.0
+    image: altran1502/immich-server:v1.123.0
     volumes:
       - /DATA/Gallery/immich:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
@@ -16,14 +16,11 @@ services:
       DB_DATABASE_NAME: immich
       DB_PASSWORD: postgres
       DB_USERNAME: postgres
-      DB_HOSTNAME: immich-postgres-v2
-      DB_PORT: 5432
-      REDIS_HOSTNAME: redis
     ports:
       - '2283:2283'
     depends_on:
       - redis
-      - immich-postgres-v2
+      - database
     restart: unless-stopped
     healthcheck:
       disable: false
@@ -33,13 +30,11 @@ services:
   immich-machine-learning:
     container_name: immich-machine-learning
     hostname: immich-machine-learning
-    image: altran1502/immich-machine-learning:v2.1.0
+    image: altran1502/immich-machine-learning:v1.123.0
     environment:
       DB_DATABASE_NAME: immich
       DB_PASSWORD: postgres
       DB_USERNAME: postgres
-      DB_HOSTNAME: immich-postgres-v2
-      DB_PORT: 5432
     restart: unless-stopped
     volumes:
       - /DATA/AppData/immich/model-cache:/cache
@@ -56,21 +51,6 @@ services:
       test: redis-cli ping || exit 1
     volumes:
       - /DATA/AppData/immich/redis:/data
-    restart: unless-stopped
-    networks:
-      - immich
-
-  immich-postgres-v2:
-    container_name: immich-postgres-v2
-    image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0
-    environment:
-      POSTGRES_DB: immich
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_INITDB_ARGS: '--data-checksums'
-    volumes:
-      - /DATA/AppData/immich/pgdata:/var/lib/postgresql/data
-    shm_size: 128mb
     restart: unless-stopped
     networks:
       - immich
@@ -107,7 +87,7 @@ services:
         '-c',
         'wal_compression=on',
       ]
-    restart: no
+    restart: unless-stopped
     networks:
       - immich
 
@@ -232,4 +212,211 @@ x-casaos:
 
       O Immich está aqui para transformar a forma como gere e desfruta dos seus ficheiros multimédia na televisão de casa, smartphones e outros dispositivos. Ao contrário dos álbuns de fotos tradicionais ou dos serviços de nuvem convencionais, o immich oferece uma plataforma moderna e fluida para organizar, partilhar e aceder às suas fotos e vídeos. Imagine fazer o backup dos seus momentos preciosos a partir dos seus dispositivos móveis sem esforço e visualizá-los instantaneamente na sua televisão ou partilhá-los com membros da família—o immich torna tudo isso possível.
 
-      O Immich destaca-se pelo backup automático a partir de dispositivos móveis, uma interface web elegante para uma navegação fácil pelos conteúdos e funcionalidades avançadas como reconhecimento facial e deteção de objetos. Pode organizar os seus conteúdos por localização, desfrutar da reprodução de vídeos em 4K e até gerir fotos RAW. Além disso, com suporte multiutilizador, partilhar memórias com amigos e família é extremamente simples. A melhor pa
+      O Immich destaca-se pelo backup automático a partir de dispositivos móveis, uma interface web elegante para uma navegação fácil pelos conteúdos e funcionalidades avançadas como reconhecimento facial e deteção de objetos. Pode organizar os seus conteúdos por localização, desfrutar da reprodução de vídeos em 4K e até gerir fotos RAW. Além disso, com suporte multiutilizador, partilhar memórias com amigos e família é extremamente simples. A melhor parte? O Immich oferece estas funcionalidades poderosas a baixo custo, garantindo uma experiência premium sem gastar muito.
+
+      Implementar o immich num dispositivo de nuvem privada como o Zima proporciona uma conveniência incomparável. Desfrute de capacidade de armazenamento ilimitada, velocidades de rede local extremamente rápidas e acesso fácil a partir de múltiplos dispositivos. Com o immich na sua nuvem privada Zima, os seus conteúdos estão sempre ao seu alcance, seguros e protegidos em sua casa.
+    ru_RU: |
+      Immich: Революция в управлении домашними медиа
+
+      Immich меняет подход к управлению и наслаждению медиафайлами на вашем домашнем телевизоре, смартфонах и других устройствах. В отличие от традиционных фотоальбомов или популярных облачных сервисов, Immich предлагает бесшовную и современную платформу для организации, обмена и доступа к вашим фотографиям и видео. Представьте, как легко создавать резервные копии ваших драгоценных моментов с мобильных устройств и мгновенно просматривать их на телевизоре или делиться ими с членами семьи — Immich делает это возможным.
+
+      Immich выделяется автоматическим резервным копированием с мобильных устройств, стильным веб-интерфейсом для удобного просмотра медиа и продвинутыми функциями, такими как распознавание лиц и обнаружение объектов. Вы можете организовывать медиа по местоположению, наслаждаться воспроизведением видео в 4K и даже управлять фотографиями в формате RAW. Благодаря поддержке нескольких пользователей делиться воспоминаниями с друзьями и семьей проще простого. И самое лучшее? Immich предлагает эти мощные функции по низкой цене, обеспечивая премиальный опыт без лишних затрат.
+
+      Развертывание Immich на частном облачном устройстве, таком как Zima, обеспечивает непревзойденное удобство. Наслаждайтесь неограниченной емкостью хранилища, молниеносной скоростью локальной сети и легким доступом с нескольких устройств. С Immich на вашем частном облаке Zima ваши медиа всегда под рукой, надежно и безопасно в вашем доме.
+    tr_TR: |
+      Immich: Ev Medya Deneyiminizi Devrimleştiriyor
+
+      Immich, ev televizyonunuzda, akıllı telefonlarınızda ve diğer cihazlarınızda medya dosyalarınızı yönetme ve keyfini çıkarma şeklinizi dönüştürmek için burada. Geleneksel fotoğraf albümlerinden veya ana akım bulut hizmetlerinden farklı olarak, immich fotoğraflarınızı ve videolarınızı düzenlemek, paylaşmak ve erişmek için kusursuz ve modern bir platform sunar. Değerli anlarınızı mobil cihazlarınızdan kolayca yedeklemeyi ve anında televizyonunuzda görüntülemeyi ya da aile üyeleriyle paylaşmayı hayal edin—immich tüm bunları mümkün kılar.
+
+      Immich, mobil cihazlardan otomatik yedekleme, medya tarama için şık bir web tabanlı arayüz ve yüz tanıma ile nesne algılama gibi gelişmiş özellikleriyle öne çıkar. Medyalarınızı konuma göre düzenleyebilir, 4K video oynatımının keyfini çıkarabilir ve hatta RAW fotoğrafları yönetebilirsiniz. Ayrıca, çok kullanıcılı destek sayesinde arkadaşlarınız ve ailenizle anıları paylaşmak çok kolay. En iyi yanı? Immich, bu güçlü özellikleri düşük maliyetle sunarak bütçenizi zorlamadan birinci sınıf bir deneyim sağlar.
+
+      Immich'i Zima gibi özel bir bulut cihazına kurmak, eşsiz bir kolaylık sunar. Sınırsız depolama kapasitesinin, yıldırım hızında yerel ağ hızlarının ve birden fazla cihazdan kolay erişimin keyfini çıkarın. Zima özel bulutunuzdaki immich ile medyalarınız her zaman parmaklarınızın ucunda, evinizde güvenli ve emniyettedir.
+
+  tagline:
+    en_US: Self-hosted media management solution
+    en_GB: Self-hosted media management solution
+    it_IT: Soluzione di gestione multimediale self-hosted
+    nb_NO: Selvdrevet løsning for mediefilbehandling
+    zh_CN: 自托管媒体管理解决方案
+    ja_JP: セルフホスト型メディア管理ソリューション
+    ko_KR: 자체 호스팅 미디어 관리 솔루션
+    fr_FR: Solution de gestion multimédia auto-hébergée
+    de_DE: Selbstgehostete Medienverwaltungslösung
+    sv_SE: Självhostad lösning för mediahantering
+    el_GR: Αυτο-φιλοξενούμενη λύση διαχείρισης μέσων
+    hr_HR: Samostalna rješenja za upravljanje medijima
+    pt_PT: Solução de gestão de multimédia auto-hospedada
+    ru_RU: Самоуправляемое решение для управления медиа
+    tr_TR: Kendi kendine barındırılan medya yönetimi çözümü
+  title:
+    en_us: Immich
+  tips:
+    before_install:
+      en_US: |
+        ⚠️ The project is under very active development.
+        ⚠️ Expect bugs and breaking changes.
+        ⚠️ Do not use the app as the only way to store your photos and videos.
+        ⚠️ Always follow 3-2-1 backup plan for your precious photos and videos!
+
+        ## Authorized Media Files and Data
+        1. Click on the settings icon in the upper right corner of the App.
+        2. In the immich-server tab, map your album storage location in the Volumes section (default is `/DATA/Gallery/immich`).
+
+        For complete project documentation and installation instructions, please [refer to](https://immich.app).
+      en_GB: |
+        ⚠️ The project is under very active development.
+        ⚠️ Expect bugs and breaking changes.
+        ⚠️ Do not use the app as the only way to store your photos and videos.
+        ⚠️ Always follow 3-2-1 backup plan for your precious photos and videos!
+
+        ## Authorised Media Files and Data
+        1. Click on the settings icon in the upper right corner of the App.
+        2. In the immich-server tab, map your album storage location in the Volumes section (default is `/DATA/Gallery/immich`).
+
+        For complete project documentation and installation instructions, please [refer to](https://immich.app).
+      it_IT: |
+        ⚠️ Il progetto è in fase di sviluppo molto attivo.
+        ⚠️ Aspettatevi bug e modifiche che potrebbero causare problemi.
+        ⚠️ Non utilizzate l'app come unico mezzo per archiviare foto e video.
+        ⚠️ Seguite sempre il piano di backup 3-2-1 per le vostre foto e video preziosi!
+
+        ## File multimediali e dati autorizzati
+        1. Cliccate sull'icona delle impostazioni nell'angolo superiore destro dell'app.
+        2. Nella scheda immich-server, mappate la posizione di archiviazione dell'album nella sezione Volumi (il valore predefinito è `/DATA/Gallery/immich`).
+
+        Per la documentazione completa del progetto e le istruzioni di installazione, consultate [qui](https://immich.app).
+      nb_NO: |
+        ⚠️ Prosjektet er under svært aktiv utvikling.
+        ⚠️ Forvent feil og endringer som kan føre til problemer.
+        ⚠️ Ikke bruk appen som den eneste måten å lagre bildene og videoene dine på.
+        ⚠️ Følg alltid 3-2-1 backup-planen for dine verdifulle bilder og videoer!
+
+        ## Autoriserte mediefiler og data
+        1. Klikk på innstillingsikonet i øvre høyre hjørne av appen.
+        2. I immich-server-fanen, kartlegg lagringsplasseringen for albumet i Volumer-seksjonen (standard er `/DATA/Gallery/immich`).
+
+        For fullstendig prosjektdokumentasjon og installasjonsinstruksjoner, vennligst [se her](https://immich.app).
+      zh_CN: |
+        ⚠️ 该项目正处于非常活跃的开发阶段。
+        ⚠️ 可能会出现错误和重大变更。
+        ⚠️ 请勿将该应用作为存储照片和视频的唯一方式。
+        ⚠️ 请始终遵循 3-2-1 备份计划以保护您珍贵的照片和视频！
+
+        ## 授权的媒体文件和数据
+        1. 点击应用右上角的设置图标。
+        2. 在 immich-server 选项卡中，在 Volumes 部分映射您的相册存储位置（默认为 `/DATA/Gallery/immich`）。
+
+        有关完整的项目文档和安装说明，请[参考](https://immich.app)。
+      ja_JP: |
+        ⚠️ このプロジェクトは非常に活発な開発中です。
+        ⚠️ バグや破壊的変更が予想されます。
+        ⚠️ 写真やビデオを保存する唯一の手段としてアプリを使用しないでください。
+        ⚠️ 大切な写真やビデオには常に3-2-1バックアップ計画に従ってください！
+
+        ## 許可されたメディアファイルとデータ
+        1. アプリの右上にある設定アイコンをクリックします。
+        2. immich-serverタブで、ボリュームセクションにアルバムの保存場所をマッピングします（デフォルトは`/DATA/Gallery/immich`）。
+
+        プロジェクトの完全なドキュメントとインストール手順については、[こちら](https://immich.app)を参照してください。
+      ko_KR: |
+        ⚠️ 이 프로젝트는 매우 활발한 개발 단계에 있습니다.
+        ⚠️ 버그와 주요 변경 사항이 발생할 수 있습니다.
+        ⚠️ 사진과 비디오를 저장하는 유일한 방법으로 앱을 사용하지 마세요.
+        ⚠️ 소중한 사진과 비디오를 위해 항상 3-2-1 백업 계획을 따르세요!
+
+        ## 승인된 미디어 파일 및 데이터
+        1. 앱의 오른쪽 상단에 있는 설정 아이콘을 클릭하세요.
+        2. immich-server 탭에서 볼륨 섹션에 앨범 저장 위치를 매핑하세요 (기본값은 `/DATA/Gallery/immich`입니다).
+
+        전체 프로젝트 문서 및 설치 지침은 [여기](https://immich.app)를 참조하세요.
+      fr_FR: |
+        ⚠️ Le projet est en développement très actif.
+        ⚠️ Attendez-vous à des bugs et des changements majeurs.
+        ⚠️ N'utilisez pas l'application comme seul moyen de stocker vos photos et vidéos.
+        ⚠️ Suivez toujours le plan de sauvegarde 3-2-1 pour vos photos et vidéos précieuses !
+
+        ## Fichiers multimédias et données autorisés
+        1. Cliquez sur l'icône des paramètres dans le coin supérieur droit de l'application.
+        2. Dans l'onglet immich-server, mappez l'emplacement de stockage de votre album dans la section Volumes (par défaut : `/DATA/Gallery/immich`).
+
+        Pour la documentation complète du projet et les instructions d'installation, veuillez [consulter](https://immich.app).
+      de_DE: |
+        ⚠️ Das Projekt befindet sich in sehr aktiver Entwicklung.
+        ⚠️ Erwarten Sie Fehler und einschneidende Änderungen.
+        ⚠️ Verwenden Sie die App nicht als einzige Möglichkeit, Ihre Fotos und Videos zu speichern.
+        ⚠️ Befolgen Sie immer den 3-2-1-Backup-Plan für Ihre wertvollen Fotos und Videos!
+
+        ## Autorisierte Mediendateien und Daten
+        1. Klicken Sie auf das Einstellungssymbol in der oberen rechten Ecke der App.
+        2. Legen Sie im immich-server-Tab den Speicherort Ihres Albums im Abschnitt Volumes fest (Standard ist `/DATA/Gallery/immich`).
+
+        Für die vollständige Projektdokumentation und Installationsanweisungen, bitte [hier klicken](https://immich.app).
+      sv_SE: |
+        ⚠️ Projektet är under mycket aktiv utveckling.
+        ⚠️ Förvänta dig buggar och förändringar som kan orsaka problem.
+        ⚠️ Använd inte appen som det enda sättet att lagra dina bilder och videor.
+        ⚠️ Följ alltid 3-2-1 backup-planen för dina värdefulla bilder och videor!
+
+        ## Auktoriserade mediefiler och data
+        1. Klicka på inställningsikonen i det övre högra hörnet av appen.
+        2. I immich-server-fliken, mappa din albumlagringsplats i avsnittet Volymer (standard är `/DATA/Gallery/immich`).
+
+        För fullständig projektdokumentation och installationsinstruktioner, vänligen [se här](https://immich.app).
+      el_GR: |
+        ⚠️ Το έργο βρίσκεται σε πολύ ενεργή ανάπτυξη.
+        ⚠️ Αναμένονται σφάλματα και αλλαγές που μπορεί να προκαλέσουν προβλήματα.
+        ⚠️ Μην χρησιμοποιείτε την εφαρμογή ως τον μοναδικό τρόπο αποθήκευσης των φωτογραφιών και βίντεό σας.
+        ⚠️ Ακολουθείτε πάντα το σχέδιο backup 3-2-1 για τις πολύτιμες φωτογραφίες και βίντεό σας!
+
+        ## Εξουσιοδοτημένα αρχεία μέσων και δεδομένα
+        1. Κάντε κλικ στο εικονίδιο ρυθμίσεων στην επάνω δεξιά γωνία της εφαρμογής.
+        2. Στην καρτέλα immich-server, χαρτογραφήστε τη θέση αποθήκευσης του άλμπουμ σας στην ενότητα Volumes (η προεπιλογή είναι `/DATA/Gallery/immich`).
+
+        Για την πλήρη τεκμηρίωση του έργου και τις οδηγίες εγκατάστασης, παρακαλώ [ανατρέξτε](https://immich.app).
+      hr_HR: |
+        ⚠️ Projekt je u vrlo aktivnom razvoju.
+        ⚠️ Očekujte pogreške i promjene koje mogu uzrokovati probleme.
+        ⚠️ Nemojte koristiti aplikaciju kao jedini način pohrane vaših fotografija i videa.
+        ⚠️ Uvijek slijedite 3-2-1 plan sigurnosnog kopiranja za svoje dragocjene fotografije i videe!
+
+        ## Ovlaštene medijske datoteke i podaci
+        1. Kliknite na ikonu postavki u gornjem desnom kutu aplikacije.
+        2. U kartici immich-server, mapirajte lokaciju pohrane albuma u odjeljku Volumi (zadano je `/DATA/Gallery/immich`).
+
+        Za potpunu dokumentaciju projekta i upute za instalaciju, molimo [pogledajte](https://immich.app).
+      pt_PT: |
+        ⚠️ O projeto está em desenvolvimento muito ativo.
+        ⚠️ Espere bugs e alterações que podem causar problemas.
+        ⚠️ Não utilize a aplicação como a única forma de armazenar as suas fotos e vídeos.
+        ⚠️ Siga sempre o plano de backup 3-2-1 para as suas fotos e vídeos valiosos!
+
+        ## Ficheiros multimédia e dados autorizados
+        1. Clique no ícone de configurações no canto superior direito da aplicação.
+        2. Na aba immich-server, mapeie a localização de armazenamento do seu álbum na secção Volumes (o padrão é `/DATA/Gallery/immich`).
+
+        Para a documentação completa do projeto e instruções de instalação, por favor [consulte](https://immich.app).
+      ru_RU: |
+        ⚠️ Проект находится в стадии активной разработки.
+        ⚠️ Ожидайте ошибок и изменений, которые могут вызвать проблемы.
+        ⚠️ Не используйте приложение как единственный способ хранения ваших фотографий и видео.
+        ⚠️ Всегда следуйте плану резервного копирования 3-2-1 для ваших ценных фотографий и видео!
+
+        ## Авторизованные медиафайлы и данные
+        1. Нажмите на значок настроек в правом верхнем углу приложения.
+        2. На вкладке immich-server укажите расположение хранилища альбома в разделе Volumes (по умолчанию `/DATA/Gallery/immich`).
+
+        Полную документацию по проекту и инструкции по установке можно найти [здесь](https://immich.app).
+      tr_TR: |
+        ⚠️ Proje çok aktif bir geliştirme aşamasında.
+        ⚠️ Hatalar ve sorunlara yol açabilecek değişiklikler bekleniyor.
+        ⚠️ Fotoğraflarınızı ve videolarınızı saklamanın tek yolu olarak uygulamayı kullanmayın.
+        ⚠️ Değerli fotoğraflarınız ve videolarınız için her zaman 3-2-1 yedekleme planını takip edin!
+
+        ## Yetkili Medya Dosyaları ve Veriler
+        1. Uygulamanın sağ üst köşesindeki ayarlar simgesine tıklayın.
+        2. immich-server sekmesinde, Volumes bölümünde albüm depolama konumunuzu eşleştirin (varsayılan `/DATA/Gallery/immich`).
+
+        Tam proje dokümantasyonu ve kurulum talimatları için lütfen [buraya](https://immich.app) bakın.
+  port_map: "2283"
+  scheme: http
+  index: /
