@@ -40,7 +40,7 @@ services:
       DB_PASSWORD: postgres
     restart: unless-stopped
     volumes:
-      - /DATA/AppData/$AppID/model-cache:/cache
+      - /DATA/AppData/immich/model-cache:/cache
     healthcheck:
       disable: false
     networks:
@@ -64,7 +64,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_INITDB_ARGS: '--data-checksums'
     volumes:
-      - /DATA/AppData/$AppID/pgdata:/var/lib/postgresql/data
+      - /DATA/AppData/immich/pgdata:/var/lib/postgresql/data
     shm_size: 128mb
     restart: unless-stopped
     networks:
