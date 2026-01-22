@@ -20,7 +20,7 @@ services:
         source: /DATA/AppData/$AppID/var/www/html/data
         target: /var/www/html/data
     post_start:
-      - command: chown -R /data www-data:www-data
+      - command: chown -R /var/www/html/data www-data:www-data
     x-casaos:
       ports:
         - container: "80"
