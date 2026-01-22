@@ -21,23 +21,6 @@ services:
         target: /var/www/html/data
     post_start:
       - command: chown -R /var/www/html/data www-data:www-data
-    x-casaos:
-      ports:
-        - container: "80"
-          description:
-            en_us: WebUI HTTP Port
-            zh_cn: WebUI HTTP 端口
-
-        - container: "443"
-          description:
-            en_us: WebUI HTTPS Port
-            zh_cn: WebUI HTTPS 端口
-
-      volumes:
-        - container: /var/www/html
-          description:
-            en_us: Nextcloud config directory.
-            zh_cn: Nextcloud 配置目录。
     container_name: nextcloud
 x-casaos:
   architectures:
