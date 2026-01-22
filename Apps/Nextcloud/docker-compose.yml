@@ -1,7 +1,7 @@
 name: nextcloud
 services:
   nextcloud:
-    image: nextcloud:27.1.3
+    image: nextcloud:32.0
     deploy:
       resources:
         reservations:
@@ -17,8 +17,10 @@ services:
     restart: unless-stopped
     volumes:
       - type: bind
-        source: /DATA/AppData/$AppID/var/www/html
-        target: /var/www/html
+        source: /DATA/AppData/$AppID/var/www/html/data
+        target: /var/www/html/data
+    post_start:
+      - command: chown -R /data www-data:www-data
     x-casaos:
       ports:
         - container: "80"
